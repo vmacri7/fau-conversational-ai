@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Audio Recorder</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='matrix-style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="matrix-scanline"></div>
+    
+    <div class="container">
+        <!-- Left Column -->
+        <div class="container-column">
+            <h2 class="matrix-heading">RECORD AND UPLOAD AUDIO</h2>
+            
+            <button class="matrix-button" id="record">Record</button>
+            <button class="matrix-button" id="stop">Stop</button>
+            <span id="timer">00:00</span>
+            
+            <form id="uploadForm" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="audio_data" id="audioData">
+            </form>
+
+            <hr class="matrix-divider">
+            
+            <h2 class="matrix-heading">RECORDED FILES</h2>
+            <ul>
+                {% for file in stt_files %}
+                <li>
+                    <audio controls>
+                        <source src="{{ url_for('stt_file', filename=file.filename) }}">
+                        Your browser does not support the audio element.
+                    </audio>
+                    <div class="file-info">
+                        <span class="filename">{{ file.filename }}</span>
+                        <a class="matrix-link" 
+                           href="{{ url_for('stt_file', filename=file.filename + '.txt') }}" 
+                           target="_blank">
+                           [VIEW TRANSCRIPT]
+                        </a>
+                        {% if file.sentiment_score is not none %}
+                        <div class="sentiment-slider" style="margin-top:10px;">
+                            <input type="range" min="-1" max="1" step="0.01" value="{{ file.sentiment_score }}" disabled>
+                            <span class="sentiment-label">
+                                <a href="{{ url_for('stt_file', filename=file.filename + '_sentiment.txt') }}" target="_blank">
+                                    {{ file.sentiment_label }} ({{ file.sentiment_score }})
+                                </a>
+                            </span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Right Column -->
+        <div class="container-column">
+            <h2 class="matrix-heading">TEXT TO SPEECH GENERATOR</h2>
+            
+            <form action="/upload_text" method="post">
+                <textarea name="text" rows="10" class="matrix-textarea"></textarea>
+                <input type="submit" value="UPLOAD" class="matrix-button">
+            </form>
+
+            <hr class="matrix-divider">
+            
+            <h2 class="matrix-heading">GENERATED AUDIO FILES</h2>
+            <ul>
+                {% for file in tts_files %}
+                <li>
+                    <audio controls>
+                        <source src="{{ url_for('tts_file', filename=file) }}">
+                        Your browser does not support the audio element.
+                    </audio>
+                    <div class="file-info">
+                        <span class="filename">{{ file }}</span>
+                        <a class="matrix-link"
+                           href="{{ url_for('tts_file', filename=file + '.txt') }}"
+                           target="_blank">
+                           [VIEW SOURCE]
+                        </a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

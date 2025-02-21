@@ -1,0 +1,145 @@
+/* matrix-style.css */
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+    font-family: 'Ubuntu Mono', monospace;
+    color: #00ff00;
+    min-height: 100vh;
+}
+
+.matrix-scanline {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom,
+        transparent 50%,
+        rgba(0, 255, 0, 0.05) 51%,
+        transparent 51%);
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 999;
+    animation: scan 2s linear infinite;
+}
+
+@keyframes scan {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 20px;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.container-column {
+    background: rgba(0, 20, 0, 0.8);
+    border: 1px solid #00ff00;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.matrix-heading {
+    color: #00ff00;
+    text-shadow: 0 0 10px #00ff00;
+    margin: 0 0 20px 0;
+    font-size: 1.5em;
+}
+
+.matrix-button {
+    background: #001100;
+    border: 1px solid #00ff00;
+    color: #00ff00;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Ubuntu Mono', monospace;
+    margin-right: 10px;
+}
+
+.matrix-button:hover {
+    background: #003300;
+    box-shadow: 0 0 15px #00ff00;
+}
+
+.matrix-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#timer {
+    color: #00ff00;
+    font-size: 1.2em;
+    margin-left: 15px;
+}
+
+audio {
+    width: 100%;
+    margin: 10px 0;
+}
+
+audio::-webkit-media-controls-panel {
+    background-color: #000;
+}
+
+audio::-webkit-media-controls-play-button,
+audio::-webkit-media-controls-timeline,
+audio::-webkit-media-controls-current-time-display,
+audio::-webkit-media-controls-time-remaining-display,
+audio::-webkit-media-controls-mute-button,
+audio::-webkit-media-controls-volume-slider {
+    filter: invert(80%) sepia(50%) saturate(4000%) hue-rotate(90deg);
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    margin: 15px 0;
+    padding: 15px;
+    border: 1px solid #00ff00;
+    background: rgba(0, 20, 0, 0.5);
+}
+
+a {
+    color: #00ff00;
+    text-decoration: none;
+    border-bottom: 1px dotted #00ff00;
+}
+
+a:hover {
+    color: #99ff99;
+    text-shadow: 0 0 10px #00ff00;
+}
+
+textarea {
+    width: 100%;
+    background: #000;
+    border: 1px solid #00ff00;
+    color: #00ff00;
+    padding: 10px;
+    font-family: 'Ubuntu Mono', monospace;
+    margin: 10px 0;
+}
+
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+    
+    .container-column {
+        margin-bottom: 20px;
+    }
+}
