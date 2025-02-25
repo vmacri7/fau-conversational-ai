@@ -134,6 +134,87 @@ textarea {
     margin: 10px 0;
 }
 
+.file-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.file-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 3px;
+    margin-bottom: 10px;
+}
+
+.matrix-link {
+    white-space: nowrap;
+}
+
+/* New sentiment meter styling */
+.sentiment-meter {
+    margin-top: 15px;
+    margin-bottom: 25px;
+    position: relative;
+    height: 35px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.sentiment-line {
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, 
+        #ff3030 0%, 
+        #ffffff 50%, 
+        #30ff30 100%);
+    box-shadow: 0 0 8px rgba(0, 255, 0, 0.5);
+}
+
+.sentiment-marker {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    transform: translateX(-50%);
+    box-shadow: 0 0 10px #383838;
+    transition: left 0.3s ease;
+}
+
+.sentiment-value {
+    position: absolute;
+    top: -22px;
+    transform: translateX(-50%);
+    font-size: 0.8em;
+    white-space: nowrap;
+}
+
+.sentiment-label {
+    position: absolute;
+    bottom: -22px;
+    transform: translateX(-50%);
+    text-shadow: 0 0 5px;
+    white-space: nowrap;
+}
+
+.sentiment-negative {
+    color: #ff3030;
+    text-shadow: 0 0 5px #ff3030;
+}
+
+.sentiment-neutral {
+    color: #ffffff;
+    text-shadow: 0 0 5px #ffffff;
+}
+
+.sentiment-positive {
+    color: #30ff30;
+    text-shadow: 0 0 5px #30ff30;
+}
+
 @media (max-width: 768px) {
     .container {
         grid-template-columns: 1fr;
