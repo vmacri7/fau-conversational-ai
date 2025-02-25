@@ -91,7 +91,7 @@ def get_stt_files():
                     for line in lines:
                         if line.startswith("Sentiment Score:"):
                             try:
-                                sentiment_score = float(line.split(":")[1].strip())
+                                sentiment_score = round(float(line.split(":")[1].strip()), ndigits=2)
                             except ValueError:
                                 sentiment_score = None
                         elif line.startswith("Sentiment:"):
