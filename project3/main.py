@@ -300,5 +300,4 @@ def stt_file(filename):
 
 
 if __name__ == '__main__':
-    # Use host='0.0.0.0' to make it accessible on your network if needed
     app.run(debug=True, host='0.0.0.0', port=5000)
