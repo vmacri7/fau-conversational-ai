@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LLM Powered Audio Sentiment Analyzer</title>
+    <!-- Ensure CSS path is correct relative to the 'static' folder -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='matrix-style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="matrix-scanline"></div>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <div class="container">
+        <!-- Single Column Layout -->
+        <div class="container-column">
+            <h2 class="matrix-heading">🤖 LLM Powered Audio Sentiment Analyzer</h2>
+
+            <button class="matrix-button" id="record">Record</button>
+            <button class="matrix-button" id="stop" disabled>Stop</button> <!-- Start disabled -->
+            <span id="timer">00:00</span>
+
+            <!-- The form submission is handled by script.js -->
+            <form id="uploadForm" method="POST" enctype="multipart/form-data" action="{{ url_for('upload_audio') }}">
+                <!-- Input is populated by JS -->
+            </form>
+
+            <hr class="matrix-divider">
+
+            <h2 class="matrix-heading">PROCESSED AUDIO FILES</h2>
+            <ul>
+                {% if stt_files %}
+                    {% for file in stt_files %}
+                    {% set base_filename = file.filename.rsplit('.', 1)[0] %}
+                    <li>
+                        <audio controls>
+                            <!-- URL for the original .wav file -->
+                            <source src="{{ url_for('stt_file', filename=file.filename) }}" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                        <div class="file-info">
+                            <span class="filename">{{ file.filename }}</span>
+                            <div class="file-links">
+                                <!-- Link to the transcript .txt file -->
+                                <a class="matrix-link"
+                                   href="{{ url_for('stt_file', filename=base_filename + '.txt') }}"
+                                   target="_blank">
+                                   [VIEW TRANSCRIPT]
+                                </a>
+                                <!-- Link to the sentiment .txt file -->
+                                <a class="matrix-link"
+                                   href="{{ url_for('stt_file', filename=base_filename + '_sentiment.txt') }}"
+                                   target="_blank">
+                                   [VIEW SENTIMENT DATA]
+                                </a>
+                            </div>
+                            {% if file.sentiment_score is not none and file.sentiment_label is not none %}
+                            <div class="sentiment-meter">
+                                <div class="sentiment-line"></div>
+                                <!-- Calculate position: score range -1 to 1 -> 0% to 100% -->
+                                {% set score_percent = (file.sentiment_score + 1) * 50 %}
+                                <div class="sentiment-marker" style="left: {{ score_percent }}%;"></div>
+                                <span class="sentiment-value" style="left: {{ score_percent }}%;">
+                                    {{ "%.2f"|format(file.sentiment_score) }} <!-- Format score to 2 decimal places -->
+                                </span>
+                                <span class="sentiment-label
+                                    {% if file.sentiment_label == 'Negative' %}sentiment-negative{% endif %}
+                                    {% if file.sentiment_label == 'Neutral' %}sentiment-neutral{% endif %}
+                                    {% if file.sentiment_label == 'Positive' %}sentiment-positive{% endif %}"
+                                    style="left: {{ score_percent }}%;">
+                                    {{ file.sentiment_label }}
+                                </span>
+                            </div>
+                            {% else %}
+                            <p style="color: #ffcc00;">Sentiment data not available or could not be parsed.</p>
+                            {% endif %}
+                        </div>
+                    </li>
+                    {% endfor %}
+                {% else %}
+                <li>No audio files processed yet. Record or upload a .wav file.</li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <!-- Right Column (TTS Generator) is REMOVED -->
+
+    </div>
+
+    <!-- Ensure JS path is correct relative to the 'static' folder -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
